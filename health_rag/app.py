@@ -224,7 +224,7 @@ hr { border-color: var(--border); }
 """, unsafe_allow_html=True)
 
 # ── Config ────────────────────────────────────────────────────────────────────
-GEMINI_API_KEY = "AIzaSyAgx7vFbXu28oaE9o3uP_ylT6QWBriFwOE"
+GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 KAGGLE_CSV_URL = (
     "https://github.com/kqin050/Chatbot/raw/refs/heads/main/Mental_Health_FAQ.csv"
 )
