@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import requests
 import io
-import google.generativeai as genai
+from openai import OpenAI
 from sentence_transformers import SentenceTransformer
 import faiss
 import time
@@ -224,7 +224,7 @@ hr { border-color: var(--border); }
 """, unsafe_allow_html=True)
 
 # ── Config ────────────────────────────────────────────────────────────────────
-GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+DEEPSEEK_API_KEY = st.secrets["DEEPSEEK_API_KEY"]
 KAGGLE_CSV_URL = (
     "https://github.com/kqin050/Chatbot/raw/refs/heads/main/Mental_Health_FAQ.csv"
 )
@@ -233,7 +233,7 @@ KAGGLE_CSV_URL = (
 EMBED_MODEL_NAME = "all-MiniLM-L6-v2"
 TOP_K = 3
 
-genai.configure(api_key=GEMINI_API_KEY)
+deepseek_client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url="https://api.deepseek.com")
 
 # ── Data & index loading (cached) ─────────────────────────────────────────────
 @st.cache_resource(show_spinner=False)
@@ -292,9 +292,12 @@ USER QUESTION:
 {query}
 
 YOUR ANSWER:"""
-    model = genai.GenerativeModel("models/gemini-2.5-flash")
-    response = model.generate_content(prompt)
-    return response.text.strip()
+    model = deepseek_client.chat.completions.create(
+        model="deepseek-chat",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1024,
+    )
+    return model.choices[0].message.content.strip()
 
 # ── Session state ─────────────────────────────────────────────────────────────
 if "messages" not in st.session_state:
@@ -365,7 +368,7 @@ st.markdown("<p style='color:#8b8fa8;font-size:0.78rem;margin-top:0.5rem'>💡 T
 suggestions = [
     "What is depression?",
     "How to manage anxiety?",
-    "What is PTSD?",
+    "What is the difference between stress and anxiety?",
     "How does therapy help?",
 ]
 cols = st.columns(len(suggestions))
@@ -402,6 +405,6 @@ st.markdown("""
     MindEase · CCAI 435 Deep Learning Project · University of Jeddah<br>
     Dataset: <a href='https://www.kaggle.com/datasets/narendrageek/mental-health-faq-for-chatbot' 
     style='color:#7c9ff5;text-decoration:none' target='_blank'>Mental Health FAQ (Kaggle)</a> · 
-    Powered by Gemini 1.5 Flash + FAISS + Sentence Transformers
+    Powered by DeepSeek + FAISS + Sentence Transformers
 </div>
 """, unsafe_allow_html=True)
