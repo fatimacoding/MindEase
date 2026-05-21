@@ -16,7 +16,6 @@ MindEase is a Streamlit-based chatbot that answers mental health questions by re
 - **RAG pipeline** — retrieves the top-K most relevant FAQ chunks before generating any response, keeping answers faithful to the source material
 - **Semantic search** — `all-MiniLM-L6-v2` embeddings with a FAISS inner-product index for fast, accurate retrieval
 - **Empathetic generation** — DeepSeek `deepseek-chat` prompted to respond warmly and flag when context is insufficient
-- **Augmented knowledge base** — 15 supplemental FAQ entries covering topics underrepresented in the base dataset (PTSD, panic attacks, bipolar disorder, schizophrenia, sleep, mindfulness, meditation, and more)
 - **Source transparency** — each bot reply shows the FAQ chunks it drew from
 - **RAGAS evaluation** — automated pipeline measuring faithfulness, answer relevancy, context precision, and context recall
 
@@ -55,7 +54,7 @@ DeepSeek LLM (deepseek-chat)
 MindEase response  +  source attribution
 ```
 
-**Knowledge base:** [Mental Health FAQ (Kaggle)](https://www.kaggle.com/datasets/narendrageek/mental-health-faq-for-chatbot) + 15 supplemental entries  
+**Knowledge base:** [Mental Health FAQ (Kaggle)](https://www.kaggle.com/datasets/narendrageek/mental-health-faq-for-chatbot) 
 **Retriever:** FAISS `IndexFlatIP` with L2-normalised embeddings (top-5 chunks)  
 **Generator:** DeepSeek `deepseek-chat` via OpenAI-compatible API
 
@@ -128,7 +127,6 @@ Key constants in both `app.py` and `evaluate.py`:
 | `TOP_K` | `5` (eval) / `3` (app) | Retrieved chunks per query |
 | `DEEPSEEK_MODEL` | `deepseek-chat` | LLM for generation and judging |
 
-> **Note:** The API key is currently hardcoded. For production use, load it from an environment variable or secrets manager (e.g. `st.secrets` in Streamlit).
 
 ---
 
